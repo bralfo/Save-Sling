@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8279162467730651330}
   - component: {fileID: 6422532157110204425}
   - component: {fileID: 6799556668761772322}
+  - component: {fileID: 219547112702032615}
   m_Layer: 10
   m_Name: Juliete
   m_TagString: Untagged
@@ -29,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 9001060615173853719}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.512, y: 0.327, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.103549376, y: 0.103549376, z: 0.103549376}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -184,3 +185,15 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 3.54, y: 2.1}
   m_EdgeRadius: 0
+--- !u!114 &219547112702032615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9001060615173853719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d00116237246f340ab3b9237879e5ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemCarregado
