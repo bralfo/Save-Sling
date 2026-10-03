@@ -26,5 +26,9 @@ public class GameManager : MonoBehaviour
             tempoPartida = 0;
             partidaAcabou = true;
         }
+        int minutos = Mathf.FloorToInt(tempoPartida / 60);
+        int segundos = Mathf.FloorToInt(tempoPartida % 60);
+
+        timerText.text = minutos.ToString("00") + ":" + segundos.ToString("00");
     }
 }
