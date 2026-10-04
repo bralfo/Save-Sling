@@ -14,9 +14,11 @@ public class Estilingue : MonoBehaviour
 
     private SalvageItem currentItem;
     private Rigidbody2D currentRigidbody;
+    private NPC currentNPC;
 
     private Camera mainCamera;
     private bool isAiming;
+
 
     private void Awake()
     {
@@ -49,12 +51,13 @@ public class Estilingue : MonoBehaviour
         }
     }
 
-    public void SetItem(SalvageItem item)
+    public void SetItem(SalvageItem item, NPC npc) //Armazena o NPC também
     {
         if (currentItem != null)
             return;
 
-        currentItem = item; 
+        currentItem = item;
+        currentNPC = npc;
 
         currentRigidbody = item.GetComponent<Rigidbody2D>(); // procura o Rigidbody2D do item
 
@@ -108,6 +111,11 @@ public class Estilingue : MonoBehaviour
             ForceMode2D.Impulse
         ); // AQUI ELE APLICA A FORÇA,, com normalized, ele aplica força de forma controlada, ainda n ta completamente feito, mas vai servir para calcular a distancia que o player puxa o estilingue e aplicar força equivalente
 
+        if (currentNPC != null)
+        {
+            currentNPC.ItemFoiLancado();
+            currentNPC = null;
+        }
         currentItem = null;
         currentRigidbody = null; // 
     }  

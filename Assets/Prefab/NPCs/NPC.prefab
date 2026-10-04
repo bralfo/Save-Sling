@@ -62,7 +62,9 @@ MonoBehaviour:
   - {fileID: 5674637956518560750, guid: e519517fb19fdc94687f54269b5023d4, type: 3}
   - {fileID: 815770247941229724, guid: 5fbfe12a1a33d3d4ca2a4ca8c6f8174b, type: 3}
   - {fileID: 1559789358557490901, guid: 669852e4ebf492540a4decd4d37ef176, type: 3}
+  - {fileID: 52921155941211107, guid: 68aa179c7f6726c49b363ae778de887d, type: 3}
   velocidade: 2
+  velocidadeSaida: 7
   alturaPulo: 0.05
   velocidadePulo: 8
   pontoSaida: {fileID: 4419953979881410188}

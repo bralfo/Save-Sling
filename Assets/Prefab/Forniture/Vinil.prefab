@@ -52,6 +52,8 @@ MonoBehaviour:
   value: 10
   weight: 1
   rb: {fileID: 3305651085712097187}
+  destroyY: -15
+  destroyX: 50
 --- !u!212 &4652937855095163772
 SpriteRenderer:
   serializedVersion: 3

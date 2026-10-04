@@ -112,6 +112,8 @@ MonoBehaviour:
   value: 10
   weight: 1
   rb: {fileID: 6422532157110204425}
+  destroyY: -15
+  destroyX: 50
 --- !u!50 &6422532157110204425
 Rigidbody2D:
   serializedVersion: 5
@@ -177,7 +179,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 3.54, y: 2.1}
+    oldSize: {x: 1.77, y: 1.05}
     newSize: {x: 3.54, y: 2.1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0

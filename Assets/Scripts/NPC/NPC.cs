@@ -7,6 +7,7 @@ public class NPC : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private GameObject[] itens;
     [SerializeField] private float velocidade = 2f;
+    [SerializeField] private float velocidadeSaida = 8f;
     [SerializeField] private float alturaPulo = 0.05f;
     [SerializeField] private float velocidadePulo = 8f;
     [SerializeField] private Transform pontoSaida;
@@ -26,6 +27,7 @@ public class NPC : MonoBehaviour
 
     private NPCSpawner spawner;
     private Transform pontoFila;
+    private Rigidbody2D rb;
 
     private bool chegouNoPonto;
     private bool esperandoEstilingue;
@@ -46,26 +48,24 @@ public class NPC : MonoBehaviour
         NPCSelect();
 
         estilingue = FindAnyObjectByType<Estilingue>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
     private void Update()
     {
         Destruir();
 
+        if (saindoDoPredio)
+        {
+            SairDoPredio();
+            return;
+        }
+
         PontoFila();
 
         VerificarChegada();
 
         VerificarEstilingue();
-
-        if (saindoDoPredio)
-        {
-            SairDoPredio();
-        }
-        else
-        {
-            PontoFila();
-        }
     }
 
     private void OnDestroy()
@@ -266,11 +266,9 @@ public class NPC : MonoBehaviour
             return;
         }
 
-        estilingue.SetItem(item);
+        estilingue.SetItem(item, this);
 
-        saindoDoPredio = true;
     }
-
 
     // =========================
     // SAÍDA DO PRÉDIO
@@ -278,11 +276,6 @@ public class NPC : MonoBehaviour
 
     private void SairDoPredio()
     {
-        Debug.Log(
-            "NPC: " + transform.position +
-            " | Saída: " + pontoSaida.position
-        );
-
         if (pontoSaida == null)
         {
             return;
@@ -291,8 +284,18 @@ public class NPC : MonoBehaviour
         transform.position = Vector3.MoveTowards(
             transform.position,
             pontoSaida.position,
-            velocidade * Time.deltaTime
+            velocidadeSaida * Time.deltaTime
         );
+
+        float distancia = Vector3.Distance(
+            transform.position,
+            pontoSaida.position
+        );
+
+        if (distancia <= 0.05f)
+        {
+            Destroy(gameObject);
+        }
     }
 
 
@@ -312,6 +315,10 @@ public class NPC : MonoBehaviour
         Debug.Log("Ponto de saída recebido: " + pontoSaida);
     }
 
+    public void ItemFoiLancado()
+    {
+        saindoDoPredio = true;
+    }
 
     // =========================
     // DESTRUIÇÃO

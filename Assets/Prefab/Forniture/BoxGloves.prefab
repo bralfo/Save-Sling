@@ -108,10 +108,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2d7b55b96a748245929faaf34544b85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SalvageItem
-  itemName: BoxGloves
+  itemName: Baseball
   value: 10
   weight: 1
   rb: {fileID: 3284982908682240042}
+  destroyY: -15.02
+  destroyX: 50.93
 --- !u!61 &2224575512496130634
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -150,7 +152,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 3.38, y: 3.54}
+    oldSize: {x: 1.69, y: 1.77}
     newSize: {x: 3.38, y: 3.54}
     adaptiveTilingThreshold: 0.5
     drawMode: 0

@@ -112,6 +112,8 @@ MonoBehaviour:
   value: 10
   weight: 1
   rb: {fileID: 1638519902493486267}
+  destroyY: -15
+  destroyX: 50
 --- !u!61 &5740836235760554164
 BoxCollider2D:
   m_ObjectHideFlags: 0

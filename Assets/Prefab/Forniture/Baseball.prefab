@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7790674391315126088}
   - component: {fileID: 2687536804604602004}
   - component: {fileID: 1401763833123171766}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Baseball
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -81,8 +81,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1686028995
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -8836283830214730600, guid: 60a70a9e7735a394fab267ba5c96a339, type: 3}
@@ -171,10 +171,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2d7b55b96a748245929faaf34544b85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SalvageItem
-  itemName: 
+  itemName: Baseball
   value: 10
   weight: 1
-  rb: {fileID: 0}
+  rb: {fileID: 686076778550861415}
+  destroyY: -15.02
+  destroyX: 50.93
 --- !u!114 &1401763833123171766
 MonoBehaviour:
   m_ObjectHideFlags: 0
