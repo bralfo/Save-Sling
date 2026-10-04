@@ -6,26 +6,38 @@ public class NPC : MonoBehaviour
     [SerializeField] private Transform itemPoint;
     [SerializeField] private Animator animator;
     [SerializeField] private GameObject[] itens;
+
     [SerializeField] private float velocidade = 2f;
+    [SerializeField] private float alturaPulo = 0.1f;
+    [SerializeField] private float velocidadePulo = 8f;
+
+    private Vector3 posicaoBase;
 
     [Header("SELFDestroy Limits")]
     [SerializeField] private float limiteX;
     [SerializeField] private float limiteY;
+
     private int itemEscolhido;
     private int npcEscolhido;
     private string nomeAnimacao;
+
     private NPCSpawner spawner;
     private Transform pontoFila;
 
 
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         ItemSort();
         NPCSelect();
-
     }
+
+
+    void Update()
+    {
+        Destroy();
+        PontoFila();
+    }
+
 
     private void ItemSort()
     {
@@ -45,50 +57,86 @@ public class NPC : MonoBehaviour
         }
     }
 
-    public void SetPontoFila(Transform ponto)
-    {
-        pontoFila = ponto;
-    }
 
     private void NPCSelect()
     {
         npcEscolhido = Random.Range(0, 16);
+
         nomeAnimacao = "NPC " + (char)('A' + npcEscolhido);
+
         animator.Play(nomeAnimacao);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        Destroy();
-
-        PontoFila();
-    }
 
     private void PontoFila()
     {
-        if (pontoFila != null)
+        if (pontoFila == null)
         {
-            transform.position = Vector3.MoveTowards(
-                transform.position,
-                pontoFila.position,
-                velocidade * Time.deltaTime
-            );
+            return;
+        }
+
+        MoverParaFila();
+        SaltarEnquantoAnda();
+    }
+
+
+    private void MoverParaFila()
+    {
+        posicaoBase = Vector3.MoveTowards(
+            posicaoBase,
+            pontoFila.position,
+            velocidade * Time.deltaTime
+        );
+    }
+
+
+    private void SaltarEnquantoAnda()
+    {
+        float distancia = Vector3.Distance(posicaoBase, pontoFila.position);
+
+        if (distancia > 0.05f)
+        {
+            float salto = Mathf.Abs(
+                Mathf.Sin(Time.time * velocidadePulo)
+            ) * alturaPulo;
+
+            transform.position = posicaoBase + Vector3.up * salto;
+        }
+        else
+        {
+            posicaoBase = pontoFila.position;
+            transform.position = posicaoBase;
         }
     }
 
+
+    public void SetPontoFila(Transform ponto)
+    {
+        pontoFila = ponto;
+
+        if (pontoFila != null)
+        {
+            posicaoBase = transform.position;
+        }
+    }
+
+
     private void Destroy()
     {
-        if (transform.position.x < limiteX || transform.position.y < limiteY)
+        if (transform.position.x < limiteX ||
+            transform.position.y < limiteY)
         {
             Destroy(gameObject);
         }
     }
 
+
     public void SetSpawner(NPCSpawner spawner)
     {
         this.spawner = spawner;
     }
+
+
     private void OnDestroy()
     {
         if (spawner != null)
