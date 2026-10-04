@@ -28,6 +28,9 @@ MonoBehaviour:
   - m_enabled: 1
     m_path: Assets/save.unity
     m_guid: 25bea8bfd393983419f1d6100fac4038
+  - m_enabled: 1
+    m_path: Assets/Menu_Loja.unity
+    m_guid: 63cd7f9e8b2f16842bfc85cecba58577
   m_HasScriptingDefines: 0
   m_ScriptingDefines: []
   m_PlayerSettingsYaml:
