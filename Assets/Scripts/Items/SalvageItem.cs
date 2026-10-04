@@ -4,17 +4,19 @@ public class SalvageItem : MonoBehaviour
 {
 
     [SerializeField] private string itemName;
+    [SerializeField] private string StoryMessage;
 
 
     [SerializeField] private int value = 10;
 
-
+    [SerializeField] private Wallet wallet;
     [SerializeField] private float weight = 1f;
 
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private float destroyY = -16f;
     [SerializeField] private float destroyX = 50f;
 
+    public string storyMessage => StoryMessage;
     public string ItemName => itemName;
     public int Value => value;
     public float Weight => weight;

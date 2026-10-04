@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -91360460487144135}
   m_Layer: 10
   m_Name: HeadPhone
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -49,6 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SalvageItem
   itemName: HeadPhone
+  StoryMessage: Meu pai me deus essa bola
   value: 10
   weight: 1
   rb: {fileID: 2741922307554561228}

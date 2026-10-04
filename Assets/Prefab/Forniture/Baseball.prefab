@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 1401763833123171766}
   m_Layer: 10
   m_Name: Baseball
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -172,6 +172,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SalvageItem
   itemName: Baseball
+  StoryMessage: Meu pai me deus essa bola
   value: 10
   weight: 1
   rb: {fileID: 686076778550861415}

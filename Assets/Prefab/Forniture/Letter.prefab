@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 3751630346170329133}
   m_Layer: 10
   m_Name: Letter
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -108,7 +108,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2d7b55b96a748245929faaf34544b85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SalvageItem
-  itemName: 
+  itemName: carta
+  StoryMessage: Meu pai me deus essa bola
   value: 10
   weight: 1
   rb: {fileID: 1971395978144196175}
