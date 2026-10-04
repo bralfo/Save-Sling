@@ -9,6 +9,11 @@ public class ItemCarregado : MonoBehaviour
         this.ponto = ponto;
     }
 
+    public void PararDeSeguir()
+    {
+        ponto = null;
+    }
+
     void LateUpdate()
     {
         if (ponto != null)

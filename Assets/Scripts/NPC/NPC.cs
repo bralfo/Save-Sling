@@ -6,50 +6,96 @@ public class NPC : MonoBehaviour
     [SerializeField] private Transform itemPoint;
     [SerializeField] private Animator animator;
     [SerializeField] private GameObject[] itens;
-
     [SerializeField] private float velocidade = 2f;
-    [SerializeField] private float alturaPulo = 0.1f;
+    [SerializeField] private float alturaPulo = 0.05f;
     [SerializeField] private float velocidadePulo = 8f;
+    [SerializeField] private Transform pontoSaida;
 
-    private Vector3 posicaoBase;
 
-    [Header("SELFDestroy Limits")]
+    [Header("Self Destroy Limits")]
     [SerializeField] private float limiteX;
     [SerializeField] private float limiteY;
 
+    private Vector3 posicaoBase;
+
     private int itemEscolhido;
     private int npcEscolhido;
+    private int indiceFila;
+
     private string nomeAnimacao;
 
     private NPCSpawner spawner;
     private Transform pontoFila;
 
+    private bool chegouNoPonto;
+    private bool esperandoEstilingue;
+    private bool saindoDoPredio;
 
-    void Start()
+    private GameObject itemAtual;
+
+    private Estilingue estilingue;
+
+
+    // =========================
+    // UNITY
+    // =========================
+
+    private void Start()
     {
         ItemSort();
         NPCSelect();
+
+        estilingue = FindAnyObjectByType<Estilingue>();
     }
 
-
-    void Update()
+    private void Update()
     {
-        Destroy();
+        Destruir();
+
         PontoFila();
+
+        VerificarChegada();
+
+        VerificarEstilingue();
+
+        if (saindoDoPredio)
+        {
+            SairDoPredio();
+        }
+        else
+        {
+            PontoFila();
+        }
     }
 
+    private void OnDestroy()
+    {
+        if (spawner != null)
+        {
+            spawner.NPCSaiu(this);
+        }
+    }
+
+
+    // =========================
+    // ITEM
+    // =========================
 
     private void ItemSort()
     {
         itemEscolhido = Random.Range(0, itens.Length);
 
-        GameObject item = Instantiate(itens[itemEscolhido], itemPoint);
+        itemAtual = Instantiate(
+            itens[itemEscolhido],
+            itemPoint
+        );
 
-        item.transform.localPosition = Vector3.zero;
-        item.transform.localRotation = Quaternion.identity;
-        item.transform.localScale = Vector3.one;
+        itemAtual.transform.localPosition = Vector3.zero;
+        itemAtual.transform.localRotation = Quaternion.identity;
+        itemAtual.transform.localScale = Vector3.one;
 
-        ItemCarregado itemCarregado = item.GetComponent<ItemCarregado>();
+        ItemCarregado itemCarregado =
+            itemAtual.GetComponent<ItemCarregado>();
 
         if (itemCarregado != null)
         {
@@ -57,16 +103,50 @@ public class NPC : MonoBehaviour
         }
     }
 
+    public SalvageItem PegarItem()
+    {
+        if (itemAtual == null)
+        {
+            return null;
+        }
+
+        ItemCarregado itemCarregado =
+            itemAtual.GetComponent<ItemCarregado>();
+
+        if (itemCarregado != null)
+        {
+            itemCarregado.PararDeSeguir();
+        }
+
+        itemAtual.transform.SetParent(null);
+
+        SalvageItem item =
+            itemAtual.GetComponent<SalvageItem>();
+
+        itemAtual = null;
+
+        return item;
+    }
+
+
+    // =========================
+    // NPC
+    // =========================
 
     private void NPCSelect()
     {
         npcEscolhido = Random.Range(0, 16);
 
-        nomeAnimacao = "NPC " + (char)('A' + npcEscolhido);
+        nomeAnimacao =
+            "NPC " + (char)('A' + npcEscolhido);
 
         animator.Play(nomeAnimacao);
     }
 
+
+    // =========================
+    // FILA
+    // =========================
 
     private void PontoFila()
     {
@@ -76,9 +156,9 @@ public class NPC : MonoBehaviour
         }
 
         MoverParaFila();
+
         SaltarEnquantoAnda();
     }
-
 
     private void MoverParaFila()
     {
@@ -89,18 +169,23 @@ public class NPC : MonoBehaviour
         );
     }
 
-
     private void SaltarEnquantoAnda()
     {
-        float distancia = Vector3.Distance(posicaoBase, pontoFila.position);
+        float distancia =
+            Vector3.Distance(
+                posicaoBase,
+                pontoFila.position
+            );
 
         if (distancia > 0.05f)
         {
-            float salto = Mathf.Abs(
-                Mathf.Sin(Time.time * velocidadePulo)
-            ) * alturaPulo;
+            float salto =
+                Mathf.Abs(
+                    Mathf.Sin(Time.time * velocidadePulo)
+                ) * alturaPulo;
 
-            transform.position = posicaoBase + Vector3.up * salto;
+            transform.position =
+                posicaoBase + Vector3.up * salto;
         }
         else
         {
@@ -108,7 +193,6 @@ public class NPC : MonoBehaviour
             transform.position = posicaoBase;
         }
     }
-
 
     public void SetPontoFila(Transform ponto)
     {
@@ -120,28 +204,127 @@ public class NPC : MonoBehaviour
         }
     }
 
-
-    private void Destroy()
+    public void AvancarNaFila(Transform novoPonto)
     {
-        if (transform.position.x < limiteX ||
-            transform.position.y < limiteY)
+        SetPontoFila(novoPonto);
+    }
+
+    public void SetIndiceFila(int indice)
+    {
+        indiceFila = indice;
+    }
+
+    private void VerificarChegada()
+    {
+        if (pontoFila == null)
         {
-            Destroy(gameObject);
+            return;
+        }
+
+        float distancia =
+            Vector3.Distance(
+                posicaoBase,
+                pontoFila.position
+            );
+
+        if (distancia <= 0.05f)
+        {
+            chegouNoPonto = true;
+        }
+        else
+        {
+            chegouNoPonto = false;
         }
     }
 
+    public bool EstaNoPonto1()
+    {
+        return chegouNoPonto && indiceFila == 0;
+    }
+
+
+    // =========================
+    // ESTILINGUE
+    // =========================
+
+    private void VerificarEstilingue()
+    {
+        if (EstaNoPonto1() && !esperandoEstilingue)
+        {
+            esperandoEstilingue = true;
+
+            EntregarItem();
+        }
+    }
+
+    private void EntregarItem()
+    {
+        SalvageItem item = PegarItem();
+
+        if (item == null)
+        {
+            return;
+        }
+
+        estilingue.SetItem(item);
+
+        saindoDoPredio = true;
+    }
+
+
+    // =========================
+    // SAÍDA DO PRÉDIO
+    // =========================
+
+    private void SairDoPredio()
+    {
+        Debug.Log(
+            "NPC: " + transform.position +
+            " | Saída: " + pontoSaida.position
+        );
+
+        if (pontoSaida == null)
+        {
+            return;
+        }
+
+        transform.position = Vector3.MoveTowards(
+            transform.position,
+            pontoSaida.position,
+            velocidade * Time.deltaTime
+        );
+    }
+
+
+    // =========================
+    // SPAWNER
+    // =========================
 
     public void SetSpawner(NPCSpawner spawner)
     {
         this.spawner = spawner;
     }
 
-
-    private void OnDestroy()
+    public void SetPontoSaida(Transform ponto)
     {
-        if (spawner != null)
+        pontoSaida = ponto;
+
+        Debug.Log("Ponto de saída recebido: " + pontoSaida);
+    }
+
+
+    // =========================
+    // DESTRUIÇÃO
+    // =========================
+
+    private void Destruir()
+    {
+        if (
+            transform.position.x < limiteX ||
+            transform.position.y < limiteY
+        )
         {
-            spawner.NPCSaiu();
+            Destroy(gameObject);
         }
     }
 }

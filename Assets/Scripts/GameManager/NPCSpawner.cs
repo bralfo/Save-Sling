@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections;
-
+using System.Collections.Generic;
 
 
 public class NPCSpawner : MonoBehaviour
@@ -10,13 +10,14 @@ public class NPCSpawner : MonoBehaviour
     [SerializeField] private GameManager gameManager;
     [SerializeField] private float intervaloSpawn = 1f;
     [SerializeField] private Transform[] pontosFila;
+    [SerializeField] private Transform pontoSaida;
     private bool spawnInicializando;
 
 
-    private int npcsAtivos;
+    private List<NPC> npcsAtivos = new List<NPC>();
 
-   
-    
+
+
     void Start()
     {
         spawnInicializando = true;
@@ -37,7 +38,7 @@ public class NPCSpawner : MonoBehaviour
 
     void Update()
     {
-        if (!spawnInicializando && npcsAtivos < 6 && !gameManager.partidaAcabou)
+        if (!spawnInicializando && npcsAtivos.Count < 6 && !gameManager.partidaAcabou)
         {
             SpawnNPC();
         }
@@ -45,17 +46,38 @@ public class NPCSpawner : MonoBehaviour
 
     public void SpawnNPC()
     {
-        GameObject novoNPC = Instantiate(npcPrefab, spawnPoint.position, spawnPoint.rotation);
+        GameObject novoNPC = Instantiate(
+        npcPrefab,
+        spawnPoint.position,
+        spawnPoint.rotation
+    );
 
         NPC npc = novoNPC.GetComponent<NPC>();
 
         npc.SetSpawner(this);
-        npc.SetPontoFila(pontosFila[npcsAtivos]);
+        npc.SetPontoSaida(pontoSaida);
 
-        npcsAtivos++;
+        npcsAtivos.Add(npc);
+
+        int indiceFila = npcsAtivos.Count - 1;
+
+        npc.SetIndiceFila(indiceFila);
+        npc.SetPontoFila(pontosFila[indiceFila]);
+
     }
-    public void NPCSaiu()
+    public void NPCSaiu(NPC npc)
     {
-        npcsAtivos--;
+        npcsAtivos.Remove(npc);
+
+        AtualizarFila();
+    }
+
+    private void AtualizarFila()
+    {
+        for (int i = 0; i < npcsAtivos.Count; i++)
+        {
+            npcsAtivos[i].SetIndiceFila(i);
+            npcsAtivos[i].AvancarNaFila(pontosFila[i]);
+        }
     }
 }

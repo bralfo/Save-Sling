@@ -25,7 +25,7 @@ public class Estilingue : MonoBehaviour
 
     private void Start()
     {
-        SetItem(Item);
+        
     }
 
     private void Update()
