@@ -172,8 +172,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SalvageItem
   itemName: Baseball
-  StoryMessage: Meu pai me deus essa bola
+  StoryMessage: 
   value: 10
+  wallet: {fileID: 0}
   weight: 1
   rb: {fileID: 686076778550861415}
   destroyY: -15.02
