@@ -4,11 +4,9 @@ using UnityEngine.InputSystem;
 
 public class Estilingue : MonoBehaviour
 {
-    
     [SerializeField] private float launchForce = 10f;
     [SerializeField] private float maxPullDistance = 5f;
 
-    
     [SerializeField] private Transform launchPoint;
     [SerializeField] private SalvageItem Item;
 
@@ -19,15 +17,9 @@ public class Estilingue : MonoBehaviour
     private Camera mainCamera;
     private bool isAiming;
 
-
     private void Awake()
     {
         mainCamera = Camera.main;
-    }
-
-    private void Start()
-    {
-        
     }
 
     private void Update()
@@ -51,7 +43,7 @@ public class Estilingue : MonoBehaviour
         }
     }
 
-    public void SetItem(SalvageItem item, NPC npc) //Armazena o NPC também
+    public void SetItem(SalvageItem item, NPC npc)
     {
         if (currentItem != null)
             return;
@@ -59,13 +51,13 @@ public class Estilingue : MonoBehaviour
         currentItem = item;
         currentNPC = npc;
 
-        currentRigidbody = item.GetComponent<Rigidbody2D>(); // procura o Rigidbody2D do item
+        currentRigidbody = item.GetComponent<Rigidbody2D>();
 
-        currentRigidbody.bodyType = RigidbodyType2D.Kinematic; // essa parte fala: se o Item estiver no estilingue, ele não vai ser afetado pela gravidade, nem por colisões, ele vai ficar parado no estilingue. Lembre-se Dynamic é o tipo de corpo que é afetado pela física, Kinematic é o tipo de corpo que não é afetado pela física, e Static é o tipo de corpo que não se move e não é afetado pela física.
-        currentRigidbody.linearVelocity = Vector2.zero; // aqui ele fala: se o Item estiver no estilingue, ele não vai ter velocidade, ele vai ficar parado no estilingue.
-        currentRigidbody.angularVelocity = 0f; // zera a rotação do item, para que ele não fique girando quando estiver no estilingue.
+        currentRigidbody.bodyType = RigidbodyType2D.Kinematic;
+        currentRigidbody.linearVelocity = Vector2.zero;
+        currentRigidbody.angularVelocity = 0f;
 
-        item.transform.position = launchPoint.position; // no momento brendon, colocamos o item no estilingue, mas ele não vai ficar no estilingue, ele vai ficar na posição do launchPoint, que é o ponto de lançamento do estilingue.
+        item.transform.position = launchPoint.position;
     }
 
     private void StartAiming()
@@ -75,48 +67,53 @@ public class Estilingue : MonoBehaviour
 
     private void UpdateAim()
     {
-        Vector3 mouseScreenPosition = Mouse.current.position.ReadValue(); // pega a posição do mouse na tela, X e Y. Z aqui é a profundidade, que é a distância da câmera até o objeto, nesse caso, o estilingue.
+        Vector3 mouseScreenPosition = Mouse.current.position.ReadValue();
+        mouseScreenPosition.z = -mainCamera.transform.position.z;
 
-        mouseScreenPosition.z =
-            -mainCamera.transform.position.z;  // aqui noix tiramos a profundidade da câmera, para que o mouse fique na mesma profundidade do estilingue
-
-        Vector3 mouseWorldPosition =
-            mainCamera.ScreenToWorldPoint(mouseScreenPosition); //  coloca o mouse no mundo(jogo)
-
+        Vector3 mouseWorldPosition = mainCamera.ScreenToWorldPoint(mouseScreenPosition);
         mouseWorldPosition.z = 0f;
 
-        Vector2 direction =
-            (Vector2)(mouseWorldPosition - launchPoint.position);
+        Vector2 direction = (Vector2)(mouseWorldPosition - launchPoint.position);
+        direction = Vector2.ClampMagnitude(direction, maxPullDistance);
 
-        direction = Vector2.ClampMagnitude(
-            direction,
-            maxPullDistance
-        );
-
-        currentItem.transform.position =
-            launchPoint.position + (Vector3)direction; // aqui é " de fato o estilingue puxando o item", ele pega a posição do launchPoint e adiciona a direção do mouse, que é a direção que o jogador está puxando o estilingue, e limita a distância máxima que o jogador pode puxar o estilingue.
+        currentItem.transform.position = launchPoint.position + (Vector3)direction;
     }
 
-    private void Launch() 
+    private void Launch()
     {
         isAiming = false;
 
-        Vector2 launchDirection =
-            (Vector2)(launchPoint.position - currentItem.transform.position); // aqui é a direção do estilingue, que é a direção que o jogador está puxando, ai vai pro outro lado né( meio confuso, mas é assim que funciona: meio que jogando o Item de volta para o launchPoint, ai entra o add force etc etc.
+        Vector2 launchDirection = (Vector2)(launchPoint.position - currentItem.transform.position);
 
-        currentRigidbody.bodyType = RigidbodyType2D.Dynamic; //  tranforma o item para Dynamic (perguntinha: PQ TRANSFORMA EM DYNAMIC? R:          )
+        // Voltar o corpo para Dynamic permite que a gravidade e forças atuem no item durante o voo
+        currentRigidbody.bodyType = RigidbodyType2D.Dynamic;
 
         currentRigidbody.AddForce(
             launchDirection.normalized * launchForce,
             ForceMode2D.Impulse
-        ); // AQUI ELE APLICA A FORÇA,, com normalized, ele aplica força de forma controlada, ainda n ta completamente feito, mas vai servir para calcular a distancia que o player puxa o estilingue e aplicar força equivalente
+        );
 
+        // 1. AVISAR A CÂMERA PARA SEGUIR O ITEM AGORA NO DISPARO
+        CameraController cam = FindAnyObjectByType<CameraController>();
+        if (cam != null)
+        {
+            cam.FollowItem(currentItem.transform);
+            Debug.Log("Item Lançado - Câmera informada com sucesso!");
+        }
+        else
+        {
+            Debug.LogError("CameraController não foi encontrado na cena!");
+        }
+
+        // 2. Notifica o NPC para sair
         if (currentNPC != null)
         {
             currentNPC.ItemFoiLancado();
             currentNPC = null;
         }
+
+        // 3. Limpa a referência do item atual no estilingue
         currentItem = null;
-        currentRigidbody = null; // 
-    }  
+        currentRigidbody = null;
+    }
 }

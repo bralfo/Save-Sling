@@ -13,6 +13,7 @@ public class NPC : MonoBehaviour
     [SerializeField] private Transform pontoSaida;
 
 
+
     [Header("Self Destroy Limits")]
     [SerializeField] private float limiteX;
     [SerializeField] private float limiteY;
