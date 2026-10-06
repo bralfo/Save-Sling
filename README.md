@@ -174,12 +174,11 @@ Adicione aqui screenshots do jogo:
 
 ## Gameplay Video
 
-[Save&Sling](https://youtu.be/zJcihTQqiao))
+[![Assista ao vídeo do SaveAndSling](https://youtube.com)](https://www.youtube.com/watch?v=zJcihTQqiao)
 
+## LINK
 
-## Download
-
-[Download do jogo](../../releases)
+[Link para jogar](https://badulante.itch.io/save-sling)
 
 ### Brendon Alexander
 
