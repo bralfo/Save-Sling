@@ -174,7 +174,8 @@ Adicione aqui screenshots do jogo:
 
 ## Gameplay Video
 
-Adicione aqui um vídeo demonstrando o jogo.
+[Save&Sling]([https://youtube.com](https://www.youtube.com/watch?v=zJcihTQqiao))
+
 
 ## Download
 
