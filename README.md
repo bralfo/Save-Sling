@@ -172,9 +172,9 @@ Adicione aqui screenshots do jogo:
 
 ![Gameplay](Assets/Images/gameplay.png)
 
-## Gameplay Video
+## Gameplay
 
-<iframe width="560" height="315" src="https://youtube.com" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+[![Save Sling Gameplay](https://img.youtube.com/vi/zJcihTQqiao/0.jpg)](https://www.youtube.com/watch?v=zJcihTQqiao)
 
 
 ## LINK
